@@ -35,6 +35,13 @@ st.markdown("""
 
     .stApp { background: var(--bg); }
 
+    /* Keep standard Streamlit text readable on the light results surface. */
+    .stMarkdown, .stMarkdown p, .stMarkdown h1, .stMarkdown h2,
+    .stMarkdown h3, .stMarkdown h4, .stMarkdown strong,
+    [data-testid="stText"] {
+        color: var(--text) !important;
+    }
+
     .block-container { max-width: 800px; padding-top: 2rem; padding-bottom: 2rem; }
 
     /* Header */
@@ -383,7 +390,7 @@ def main():
 
         # ATS Score
         try:
-            percentage = int(results['ats_score']['percentage'])
+            percentage = max(0, min(100, int(results.get('ats_score', {}).get('percentage', 0))))
         except:
             percentage = 0
 
@@ -524,42 +531,6 @@ def main():
                     st.markdown(f'<div>{badges}</div>', unsafe_allow_html=True)
                 else:
                     st.info("All listed skills appear relevant.")
-
-        st.markdown("<hr>", unsafe_allow_html=True)
-
-        st.markdown('<div class="section-header">Next Steps</div>', unsafe_allow_html=True)
-
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.markdown("""
-            <div class="card" style="text-align: center;">
-                <div style="font-size: 1.25rem; margin-bottom: 0.5rem;">1</div>
-                <div style="font-weight: 600;">Update Resume</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Apply the AI suggestions</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with c2:
-            st.markdown("""
-            <div class="card" style="text-align: center;">
-                <div style="font-size: 1.25rem; margin-bottom: 0.5rem;">2</div>
-                <div style="font-weight: 600;">Review & Refine</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Personalize with your voice</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with c3:
-            st.markdown("""
-            <div class="card" style="text-align: center;">
-                <div style="font-size: 1.25rem; margin-bottom: 0.5rem;">3</div>
-                <div style="font-weight: 600;">Apply with Confidence</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Submit your tailored resume</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        if st.button("Analyze Another Job", use_container_width=True):
-            st.session_state.results = None
-            st.rerun()
 
     # Footer
     st.markdown("""

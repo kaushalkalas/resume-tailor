@@ -11,6 +11,7 @@ load_dotenv()
 
 MAX_RETRIES = 3
 RETRY_DELAY = 2
+DEFAULT_MODEL = "openai/gpt-oss-20b"
 
 
 def get_ai_suggestions(resume_text, job_description):
@@ -43,6 +44,7 @@ def get_ai_suggestions(resume_text, job_description):
     
     resume_truncated = truncate_text(resume_text, max_chars=8000)
     jd_truncated = truncate_text(job_description, max_chars=4000)
+    model = os.getenv("GROQ_MODEL", DEFAULT_MODEL)
     
     try:
         client = Groq(api_key=api_key, timeout=60.0)
@@ -93,7 +95,7 @@ JOB DESCRIPTION:
         for attempt in range(MAX_RETRIES):
             try:
                 message = client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
+                    model=model,
                     max_tokens=2048,
                     messages=[
                         {

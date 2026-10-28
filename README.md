@@ -163,7 +163,7 @@ python-dotenv  # Automatically loads .env on startup
 
 ### Model Selection
 
-Currently using `llama-3.1-8b-instant` for:
+Currently using `openai/gpt-oss-20b` for:
 - Fast responses (2-5 seconds)
 - Accurate analysis
 - Free tier availability
